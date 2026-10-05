@@ -1,0 +1,6614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MuscleMode</title>
+
+<style>
+
+:root{
+  --accent:#ff2b2b;
+  --bg:#080808;
+  --card:#111111;
+  --border:#262626;
+  --muted:#8c8c8c;
+  --green:#2ecc71;
+  --blue:#3498db;
+  --purple:#9b59ff;
+  --orange:#ff8a2a;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(255,43,43,.08),transparent 25%),
+    radial-gradient(circle at 90% 20%,rgba(120,50,255,.07),transparent 22%),
+    var(--bg);
+  color:white;
+  min-height:100vh;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(8,8,8,.96);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--border);
+}
+
+.header-inner{
+  max-width:1400px;
+  margin:auto;
+  padding:15px 18px;
+}
+
+.brand-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.brand{
+  font-size:26px;
+  font-weight:950;
+  letter-spacing:1px;
+}
+
+.brand span{
+  color:var(--accent);
+}
+
+.status{
+  color:var(--muted);
+  font-size:11px;
+  border:1px solid var(--border);
+  padding:6px 10px;
+  border-radius:999px;
+}
+
+.nav{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+.nav::-webkit-scrollbar{
+  display:none;
+}
+
+.nav button{
+  flex:0 0 auto;
+  background:#101010;
+  color:#ccc;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:9px 13px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:white;
+}
+
+.nav .owner-btn{
+  color:#ff6666;
+  border-color:#612525;
+}
+
+main{
+  width:min(1250px,calc(100% - 30px));
+  margin:auto;
+  padding:28px 0 60px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.hero{
+  padding:42px;
+  border:1px solid var(--border);
+  border-radius:22px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,43,43,.08),
+      rgba(120,60,255,.05)
+    ),
+    #0f0f0f;
+}
+
+.hero small{
+  color:var(--accent);
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.hero h1{
+  font-size:clamp(40px,8vw,78px);
+  line-height:.95;
+  margin-top:10px;
+  font-weight:950;
+}
+
+.hero h1 span{
+  color:var(--accent);
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:700px;
+  line-height:1.6;
+  margin-top:17px;
+}
+
+.section-title{
+  margin:28px 0 14px;
+  font-size:23px;
+  font-weight:900;
+}
+
+.subtext{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+
+.card,
+.panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+}
+
+.stat-card{
+  min-height:120px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.stat-number{
+  font-size:31px;
+  font-weight:950;
+  margin-top:8px;
+}
+
+.red{
+  color:var(--accent);
+}
+
+.purple-text{
+  color:var(--purple);
+}
+
+.blue-text{
+  color:var(--blue);
+}
+
+.orange-text{
+  color:var(--orange);
+}
+
+.green-text{
+  color:var(--green);
+}
+
+.btn{
+  border:0;
+  background:var(--accent);
+  color:white;
+  border-radius:9px;
+  padding:11px 14px;
+  font-weight:850;
+}
+
+.btn.secondary{
+  background:#202020;
+  border:1px solid #303030;
+}
+
+.btn.green{
+  background:#168446;
+}
+
+.btn.blue{
+  background:#1d67a8;
+}
+
+.btn.purple{
+  background:#6732b0;
+}
+
+.btn.orange{
+  background:#a95d1b;
+}
+
+.btn.danger{
+  background:#8f1818;
+}
+
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+}
+
+.two-col{
+  display:grid;
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+label{
+  display:block;
+  color:#ddd;
+  font-size:13px;
+  font-weight:700;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  margin-top:7px;
+  background:#0c0c0c;
+  color:white;
+  border:1px solid #303030;
+  border-radius:9px;
+  padding:11px 12px;
+  outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--accent);
+}
+
+.tags{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:12px 0 10px;
+}
+
+.tag{
+  background:#191919;
+  border:1px solid #303030;
+  color:#aaa;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.workout-card{
+  display:flex;
+  flex-direction:column;
+  min-height:235px;
+}
+
+.workout-top{
+  display:flex;
+  justify-content:space-between;
+}
+
+.favorite{
+  background:none;
+  border:0;
+  color:#ffd54d;
+  font-size:24px;
+}
+
+.spacer{
+  flex:1;
+}
+
+.progress-track{
+  height:10px;
+  background:#242424;
+  border-radius:999px;
+  overflow:hidden;
+  margin:13px 0 8px;
+}
+
+.progress-bar{
+  height:100%;
+  width:0;
+  background:
+    linear-gradient(
+      90deg,
+      var(--accent),
+      #873dff
+    );
+  border-radius:999px;
+}
+
+.announcement{
+  display:none;
+  margin-top:18px;
+  padding:14px 16px;
+  border:1px solid #57441c;
+  background:#171209;
+  color:#ffd677;
+  border-radius:12px;
+}
+
+.announcement.show{
+  display:block;
+}
+
+/* =========================================
+   AI TRAINER CHAT
+========================================= */
+
+.ai-chat{
+  width:100%;
+  max-width:950px;
+  margin:auto;
+  height:calc(100vh - 150px);
+  min-height:600px;
+  display:flex;
+  flex-direction:column;
+  background:#0d0d0d;
+  border:1px solid #292929;
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.ai-chat-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:18px 20px;
+  border-bottom:1px solid #292929;
+  background:#111111;
+}
+
+.ai-chat-header h1{
+  font-size:23px;
+  font-weight:950;
+}
+
+.ai-chat-header p{
+  color:#777;
+  font-size:12px;
+  margin-top:4px;
+}
+
+.ai-online{
+  color:#2ecc71;
+  font-size:11px;
+  font-weight:900;
+}
+
+.ai-messages{
+  flex:1;
+  overflow-y:auto;
+  padding:24px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.ai-message{
+  display:flex;
+  gap:12px;
+  max-width:85%;
+}
+
+.trainer-message{
+  align-self:flex-start;
+}
+
+.user-message{
+  align-self:flex-end;
+  flex-direction:row-reverse;
+}
+
+.ai-avatar{
+  width:36px;
+  height:36px;
+  min-width:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:var(--accent);
+  color:white;
+  font-size:12px;
+  font-weight:950;
+}
+
+.user-avatar{
+  background:#292929;
+}
+
+.message-content{
+  background:#151515;
+  border:1px solid #252525;
+  border-radius:14px;
+  padding:12px 15px;
+}
+
+.user-message .message-content{
+  background:#202020;
+}
+
+.message-content b{
+  display:block;
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.message-content p{
+  color:#ddd;
+  font-size:14px;
+  line-height:1.6;
+  white-space:pre-line;
+}
+
+.ai-quick-buttons{
+  display:flex;
+  gap:7px;
+  padding:10px 15px;
+  overflow-x:auto;
+  border-top:1px solid #222;
+  background:#0f0f0f;
+  scrollbar-width:none;
+}
+
+.ai-quick-buttons::-webkit-scrollbar{
+  display:none;
+}
+
+.ai-quick-buttons button{
+  flex:0 0 auto;
+  padding:8px 11px;
+  border-radius:999px;
+  border:1px solid #303030;
+  background:#171717;
+  color:#bbb;
+  font-size:11px;
+  font-weight:800;
+}
+
+.ai-quick-buttons button:hover{
+  color:white;
+  border-color:var(--accent);
+}
+
+.ai-input-area{
+  display:flex;
+  gap:8px;
+  padding:12px;
+  border-top:1px solid #292929;
+  background:#111111;
+}
+
+.ai-input-area input{
+  flex:1;
+  margin:0;
+  background:#0a0a0a;
+}
+
+.ai-input-area button{
+  width:50px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:white;
+  font-size:20px;
+  font-weight:900;
+}
+
+/* =========================================
+   OWNER
+========================================= */
+
+.owner-shell{
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,43,43,.07),
+      rgba(110,60,255,.05)
+    ),
+    #101010;
+  border:1px solid #512020;
+  border-radius:20px;
+  padding:22px;
+}
+
+.owner-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.owner-header h1{
+  font-size:30px;
+  font-weight:950;
+}
+
+.owner-pill{
+  background:#281111;
+  border:1px solid #6e2424;
+  color:#ff6363;
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.owner-section{
+  margin-top:25px;
+}
+
+.owner-section h2{
+  font-size:17px;
+  margin-bottom:11px;
+}
+
+.owner-card{
+  background:#131313;
+  border:1px solid #292929;
+  border-radius:13px;
+  padding:15px;
+}
+
+.owner-card h3{
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.owner-card .btn{
+  width:100%;
+  margin-top:7px;
+}
+
+.command-box{
+  background:#090909;
+  border:1px solid #343434;
+  border-radius:14px;
+  padding:16px;
+}
+
+.command-input{
+  font-family:Consolas,monospace;
+}
+
+.command-output{
+  margin-top:12px;
+  background:#050505;
+  border:1px solid #242424;
+  border-radius:10px;
+  padding:14px;
+  min-height:100px;
+  max-height:300px;
+  overflow-y:auto;
+  white-space:pre-wrap;
+  color:#bdbdbd;
+  font-family:Consolas,monospace;
+  font-size:13px;
+}
+
+/* =========================================
+   MODALS
+========================================= */
+
+.modal-bg{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.82);
+  padding:15px;
+}
+
+.modal-bg.show{
+  display:flex;
+}
+
+.modal{
+  width:min(600px,100%);
+  max-height:90vh;
+  overflow-y:auto;
+  background:#111;
+  border:1px solid #333;
+  border-radius:18px;
+  padding:20px;
+}
+
+.timer{
+  text-align:center;
+}
+
+.timer-name{
+  color:var(--muted);
+  font-size:18px;
+}
+
+.timer-number{
+  font-size:clamp(78px,18vw,150px);
+  font-weight:950;
+  margin:8px 0;
+}
+
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin-top:13px;
+}
+
+.list-item{
+  background:#151515;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+}
+
+footer{
+  text-align:center;
+  padding:25px 15px 35px;
+  color:#555;
+  border-top:1px solid var(--border);
+  font-size:12px;
+}
+
+@media(max-width:700px){
+
+  .hero{
+    padding:28px 22px;
+  }
+
+  .two-col{
+    grid-template-columns:1fr;
+  }
+
+  .owner-header,
+  .ai-chat-header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .status{
+    display:none;
+  }
+
+  .ai-chat{
+    height:calc(100vh - 125px);
+    min-height:500px;
+    border-radius:12px;
+  }
+
+  .ai-message{
+    max-width:94%;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <div class="brand-row">
+
+      <div class="brand">
+        MUSCLE<span>MODE</span>
+      </div>
+
+      <div class="status">
+        TRAIN • TRACK • IMPROVE
+      </div>
+
+    </div>
+
+    <nav class="nav">
+
+      <button onclick="showPage('home')">
+        HOME
+      </button>
+
+      <button onclick="showPage('workouts')">
+        WORKOUTS
+      </button>
+
+      <button onclick="showPage('favorites')">
+        FAVORITES
+      </button>
+
+      <button onclick="showPage('progress')">
+        PROGRESS
+      </button>
+
+      <button onclick="showPage('trainer')">
+        AI TRAINER
+      </button>
+
+      <button onclick="showPage('store')">
+        STORE
+      </button>
+
+      <button onclick="showPage('profile')">
+        PROFILE
+      </button>
+
+      <button onclick="showPage('challenges')">
+        CHALLENGES
+      </button>
+
+      <button onclick="showPage('leaderboard')">
+        LEADERBOARD
+      </button>
+
+      <button
+        class="owner-btn"
+        onclick="openOwner()"
+      >
+        OWNER
+      </button>
+
+    </nav>
+
+  </div>
+
+</header>
+
+<main>
+
+
+<!-- =========================================
+     HOME
+========================================= -->
+
+<section id="home" class="page active">
+
+  <div class="hero">
+
+    <small>MUSCLEMODE FITNESS</small>
+
+    <h1>
+      GET <span>STRONGER.</span><br>
+      EVERY DAY.
+    </h1>
+
+    <p>
+      Train smarter, track your progress,
+      stay consistent, and build your fitness journey.
+    </p>
+
+    <div class="buttons">
+
+      <button
+        class="btn"
+        onclick="showPage('workouts')"
+      >
+        START WORKOUT
+      </button>
+
+      <button
+        class="btn secondary"
+        onclick="showPage('trainer')"
+      >
+        AI TRAINER
+      </button>
+
+    </div>
+
+  </div>
+
+  <div
+    id="announcement"
+    class="announcement"
+  ></div>
+
+  <h2 class="section-title">
+    Your Dashboard
+  </h2>
+
+  <div class="grid">
+
+    <div class="card stat-card">
+
+      <div class="stat-label">
+        SESSIONS
+      </div>
+
+      <div
+        id="homeSessions"
+        class="stat-number"
+      >
+        0
+      </div>
+
+    </div>
+
+    <div class="card stat-card">
+
+      <div class="stat-label">
+        XP
+      </div>
+
+      <div
+        id="homeXP"
+        class="stat-number red"
+      >
+        0
+      </div>
+
+    </div>
+
+    <div class="card stat-card">
+
+      <div class="stat-label">
+        STREAK
+      </div>
+
+      <div
+        id="homeStreak"
+        class="stat-number orange-text"
+      >
+        0
+      </div>
+
+    </div>
+
+    <div class="card stat-card">
+
+      <div class="stat-label">
+        LEVEL
+      </div>
+
+      <div
+        id="homeLevel"
+        class="stat-number purple-text"
+      >
+        1
+      </div>
+
+    </div>
+
+    <div class="card stat-card">
+
+      <div class="stat-label">
+        FAVORITES
+      </div>
+
+      <div
+        id="homeFavorites"
+        class="stat-number blue-text"
+      >
+        0
+      </div>
+
+    </div>
+
+  </div>
+
+  <h2 class="section-title">
+    Daily Check-In
+  </h2>
+
+  <div class="panel">
+
+    <div class="two-col">
+
+      <label>
+        Energy
+
+        <select id="checkEnergy">
+
+          <option value="low">
+            Low
+          </option>
+
+          <option value="medium">
+            Medium
+          </option>
+
+          <option value="high">
+            High
+          </option>
+
+        </select>
+
+      </label>
+
+      <label>
+        Mood
+
+        <select id="checkMood">
+
+          <option value="low">
+            Low
+          </option>
+
+          <option value="okay">
+            Okay
+          </option>
+
+          <option value="great">
+            Great
+          </option>
+
+        </select>
+
+      </label>
+
+      <label>
+        Sleep
+
+        <select id="checkSleep">
+
+          <option value="poor">
+            Poor
+          </option>
+
+          <option value="okay">
+            Okay
+          </option>
+
+          <option value="great">
+            Great
+          </option>
+
+        </select>
+
+      </label>
+
+    </div>
+
+    <button
+      class="btn"
+      style="margin-top:14px;"
+      onclick="saveCheckIn()"
+    >
+      SAVE CHECK-IN
+    </button>
+
+    <div
+      class="list-item"
+      style="margin-top:14px;"
+    >
+
+      <b>
+        Recommendation
+      </b>
+
+      <p
+        id="recommendation"
+        class="subtext"
+      >
+        Complete your check-in.
+      </p>
+
+    </div>
+
+  </div>
+
+  <h2 class="section-title">
+    Featured Workouts
+  </h2>
+
+  <div
+    id="homeWorkouts"
+    class="grid"
+  ></div>
+
+</section>
+
+
+<!-- =========================================
+     WORKOUTS
+========================================= -->
+
+<section id="workouts" class="page">
+
+  <h1 class="section-title">
+    Workouts
+  </h1>
+
+  <p class="subtext">
+    Choose a workout and start training.
+  </p>
+
+  <div
+    class="two-col"
+    style="margin-top:16px;"
+  >
+
+    <input
+      id="workoutSearch"
+      placeholder="Search workouts..."
+      oninput="renderWorkouts()"
+    >
+
+    <select
+      id="workoutCategory"
+      onchange="renderWorkouts()"
+    >
+
+      <option value="all">
+        All Categories
+      </option>
+
+      <option value="chest">
+        Chest
+      </option>
+
+      <option value="back">
+        Back
+      </option>
+
+      <option value="arms">
+        Arms
+      </option>
+
+      <option value="legs">
+        Legs
+      </option>
+
+      <option value="core">
+        Core
+      </option>
+
+      <option value="shoulders">
+        Shoulders
+      </option>
+
+      <option value="conditioning">
+        Conditioning
+      </option>
+
+    </select>
+
+  </div>
+
+  <select
+    id="workoutDifficulty"
+    onchange="renderWorkouts()"
+    style="margin-top:10px;"
+  >
+
+    <option value="all">
+      All Difficulty
+    </option>
+
+    <option value="beginner">
+      Beginner
+    </option>
+
+    <option value="intermediate">
+      Intermediate
+    </option>
+
+    <option value="advanced">
+      Advanced
+    </option>
+
+  </select>
+
+  <div
+    id="workoutGrid"
+    class="grid"
+    style="margin-top:16px;"
+  ></div>
+
+</section>
+
+
+<!-- =========================================
+     FAVORITES
+========================================= -->
+
+<section id="favorites" class="page">
+
+  <h1 class="section-title">
+    Favorites
+  </h1>
+
+  <p class="subtext">
+    Your saved workouts.
+  </p>
+
+  <div
+    id="favoriteGrid"
+    class="grid"
+    style="margin-top:16px;"
+  ></div>
+
+</section>
+
+
+<!-- =========================================
+     PROGRESS
+========================================= -->
+
+<section id="progress" class="page">
+
+  <h1 class="section-title">
+    Progress
+  </h1>
+
+  <div class="grid">
+
+    <div class="panel">
+
+      <div class="stat-label">
+        LEVEL
+      </div>
+
+      <h2
+        id="progressLevel"
+        style="margin-top:7px;"
+      >
+        1
+      </h2>
+
+      <p
+        id="progressLevelTitle"
+        class="purple-text"
+      >
+        STARTER
+      </p>
+
+      <div class="progress-track">
+
+        <div
+          id="xpFill"
+          class="progress-bar"
+        ></div>
+
+      </div>
+
+      <p
+        id="xpText"
+        class="subtext"
+      >
+        0 / 500 XP
+      </p>
+
+    </div>
+
+
+    <div class="panel">
+
+      <div class="stat-label">
+        GOAL
+      </div>
+
+      <h2
+        id="goalText"
+        style="margin-top:7px;"
+      >
+        Build Strength
+      </h2>
+
+      <div class="progress-track">
+
+        <div
+          id="goalFill"
+          class="progress-bar"
+        ></div>
+
+      </div>
+
+      <p
+        id="goalProgress"
+        class="subtext"
+      >
+        0%
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <h2 class="section-title">
+    Streak
+  </h2>
+
+  <div class="panel">
+
+    <h2 id="streakNumber">
+      0 Day Streak
+    </h2>
+
+    <p class="subtext">
+      Streak freezes
+    </p>
+
+    <h2
+      id="freezeNumber"
+      class="orange-text"
+    >
+      0
+    </h2>
+
+  </div>
+
+
+  <h2 class="section-title">
+    Measurements
+  </h2>
+
+  <div class="panel">
+
+    <div class="two-col">
+
+      <input
+        id="measureWeight"
+        type="number"
+        placeholder="Weight"
+      >
+
+      <input
+        id="measureChest"
+        type="number"
+        placeholder="Chest"
+      >
+
+      <input
+        id="measureWaist"
+        type="number"
+        placeholder="Waist"
+      >
+
+      <input
+        id="measureArms"
+        type="number"
+        placeholder="Arms"
+      >
+
+    </div>
+
+    <button
+      class="btn"
+      style="margin-top:14px;"
+      onclick="saveMeasurements()"
+    >
+      SAVE MEASUREMENTS
+    </button>
+
+  </div>
+
+
+  <h2 class="section-title">
+    Progress Photo
+  </h2>
+
+  <div class="panel">
+
+    <input
+      id="progressPhoto"
+      type="file"
+      accept="image/*"
+    >
+
+    <img
+      id="photoPreview"
+      style="
+        display:none;
+        width:100%;
+        max-height:350px;
+        object-fit:contain;
+        margin-top:12px;
+        border-radius:12px;
+      "
+    >
+
+    <button
+      class="btn"
+      style="margin-top:12px;"
+      onclick="saveProgressPhoto()"
+    >
+      SAVE PHOTO
+    </button>
+
+  </div>
+
+
+  <h2 class="section-title">
+    Personal Records
+  </h2>
+
+  <div class="panel">
+
+    <div class="two-col">
+
+      <input
+        id="recordExercise"
+        placeholder="Exercise"
+      >
+
+      <input
+        id="recordWeight"
+        type="number"
+        placeholder="Weight"
+      >
+
+    </div>
+
+    <button
+      class="btn"
+      style="margin-top:13px;"
+      onclick="saveRecord()"
+    >
+      SAVE RECORD
+    </button>
+
+    <div
+      id="recordsList"
+      class="list"
+    ></div>
+
+  </div>
+
+
+  <h2 class="section-title">
+    Training History
+  </h2>
+
+  <div
+    id="historyList"
+    class="list"
+  ></div>
+
+</section>
+
+
+<!-- =========================================
+     AI TRAINER CHAT
+========================================= -->
+
+<section id="trainer" class="page">
+
+  <div class="ai-chat">
+
+    <div class="ai-chat-header">
+
+      <div>
+
+        <h1>
+          AI TRAINER
+        </h1>
+
+        <p>
+          Your personal MuscleMode trainer
+        </p>
+
+      </div>
+
+      <div class="ai-online">
+        ● ONLINE
+      </div>
+
+    </div>
+
+
+    <div
+      id="aiMessages"
+      class="ai-messages"
+    >
+
+      <div
+        class="ai-message trainer-message"
+      >
+
+        <div class="ai-avatar">
+          M
+        </div>
+
+        <div class="message-content">
+
+          <b>
+            MuscleMode Trainer
+          </b>
+
+          <p>
+Hey! 👋 I'm your MuscleMode AI Trainer.
+
+I can help you with workouts, exercises, training plans, XP, levels, streaks, and your progress.
+
+What do you want to work on?
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="ai-quick-buttons">
+
+      <button
+        onclick="quickAI('Give me a workout for today')"
+      >
+        TODAY'S WORKOUT
+      </button>
+
+      <button
+        onclick="quickAI('Give me a chest workout')"
+      >
+        CHEST
+      </button>
+
+      <button
+        onclick="quickAI('Give me a leg workout')"
+      >
+        LEGS
+      </button>
+
+      <button
+        onclick="quickAI('Give me an ab workout')"
+      >
+        CORE
+      </button>
+
+      <button
+        onclick="quickAI('Give me an arm workout')"
+      >
+        ARMS
+      </button>
+
+      <button
+        onclick="quickAI('Give me a back workout')"
+      >
+        BACK
+      </button>
+
+      <button
+        onclick="quickAI('How is my progress?')"
+      >
+        MY PROGRESS
+      </button>
+
+    </div>
+
+
+    <div class="ai-input-area">
+
+      <input
+        id="aiInput"
+        type="text"
+        placeholder="Message your AI Trainer..."
+        onkeydown="
+          if(event.key==='Enter'){
+            sendAIMessage();
+          }
+        "
+      >
+
+      <button
+        onclick="sendAIMessage()"
+      >
+        ➤
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================
+     STORE
+========================================= -->
+
+<section id="store" class="page">
+
+  <h1 class="section-title">
+    Store
+  </h1>
+
+  <div class="grid">
+
+    <div class="card">
+
+      <h3>
+        Purple Theme
+      </h3>
+
+      <p class="subtext">
+        Change the accent color.
+      </p>
+
+      <button
+        class="btn purple"
+        style="margin-top:12px;"
+        onclick="buyTheme('purple')"
+      >
+        SELECT
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Blue Theme
+      </h3>
+
+      <button
+        class="btn blue"
+        style="margin-top:12px;"
+        onclick="buyTheme('blue')"
+      >
+        SELECT
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Green Theme
+      </h3>
+
+      <button
+        class="btn green"
+        style="margin-top:12px;"
+        onclick="buyTheme('green')"
+      >
+        SELECT
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Orange Theme
+      </h3>
+
+      <button
+        class="btn orange"
+        style="margin-top:12px;"
+        onclick="buyTheme('orange')"
+      >
+        SELECT
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Elite Badge
+      </h3>
+
+      <p class="subtext">
+        Unlock Elite status.
+      </p>
+
+      <button
+        class="btn"
+        style="margin-top:12px;"
+        onclick="unlockElite()"
+      >
+        UNLOCK
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        PRO Athlete
+      </h3>
+
+      <p class="subtext">
+        Unlock the PRO title.
+      </p>
+
+      <button
+        class="btn purple"
+        style="margin-top:12px;"
+        onclick="activatePro()"
+      >
+        ACTIVATE
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Strength Pack
+      </h3>
+
+      <button
+        class="btn"
+        style="margin-top:12px;"
+        onclick="unlockStrengthPack()"
+      >
+        UNLOCK
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Conditioning Pack
+      </h3>
+
+      <button
+        class="btn orange"
+        style="margin-top:12px;"
+        onclick="unlockConditioningPack()"
+      >
+        UNLOCK
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================
+     PROFILE
+========================================= -->
+
+<section id="profile" class="page">
+
+  <h1 class="section-title">
+    Profile
+  </h1>
+
+  <div class="panel">
+
+    <h2 id="profileName">
+      User
+    </h2>
+
+    <p
+      class="subtext"
+      style="margin-top:15px;"
+    >
+      Goal
+    </p>
+
+    <h3 id="profileGoal">
+      Build Strength
+    </h3>
+
+    <p
+      class="subtext"
+      style="margin-top:15px;"
+    >
+      Level Title
+    </p>
+
+    <h3 id="profileTitle">
+      STARTER
+    </h3>
+
+    <p
+      class="subtext"
+      style="margin-top:15px;"
+    >
+      Account Mode
+    </p>
+
+    <h3 id="profileMode">
+      LOCAL PROFILE
+    </h3>
+
+    <div class="buttons">
+
+      <button
+        id="soundButton"
+        class="btn secondary"
+        onclick="toggleSound()"
+      >
+        SOUND ON
+      </button>
+
+      <button
+        class="btn secondary"
+        onclick="trainingReminder()"
+      >
+        TRAINING REMINDER
+      </button>
+
+      <button
+        class="btn danger"
+        onclick="resetAllData()"
+      >
+        RESET DATA
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================
+     CHALLENGES
+========================================= -->
+
+<section id="challenges" class="page">
+
+  <h1 class="section-title">
+    Challenges
+  </h1>
+
+  <div
+    id="challengeList"
+    class="grid"
+  ></div>
+
+</section>
+
+
+<!-- =========================================
+     LEADERBOARD
+========================================= -->
+
+<section id="leaderboard" class="page">
+
+  <h1 class="section-title">
+    Leaderboard
+  </h1>
+
+  <div class="panel">
+
+    <p class="subtext">
+      Local demo leaderboard.
+    </p>
+
+    <div
+      id="leaderboardList"
+      class="list"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================
+     OWNER
+========================================= -->
+
+<section id="owner" class="page">
+
+  <div class="owner-shell">
+
+    <div class="owner-header">
+
+      <div>
+
+        <h1>
+          Owner Panel
+        </h1>
+
+        <p class="subtext">
+          Full control center for MuscleMode.
+        </p>
+
+      </div>
+
+      <div class="owner-pill">
+        OWNER ACCESS
+      </div>
+
+    </div>
+
+
+    <div class="grid">
+
+      <div class="card stat-card">
+
+        <div class="stat-label">
+          NAME
+        </div>
+
+        <div
+          id="ownerStatName"
+          class="stat-number"
+        >
+          User
+        </div>
+
+      </div>
+
+
+      <div class="card stat-card">
+
+        <div class="stat-label">
+          XP
+        </div>
+
+        <div
+          id="ownerStatXP"
+          class="stat-number red"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="card stat-card">
+
+        <div class="stat-label">
+          LEVEL
+        </div>
+
+        <div
+          id="ownerStatLevel"
+          class="stat-number purple-text"
+        >
+          1
+        </div>
+
+      </div>
+
+
+      <div class="card stat-card">
+
+        <div class="stat-label">
+          STREAK
+        </div>
+
+        <div
+          id="ownerStatStreak"
+          class="stat-number orange-text"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="card stat-card">
+
+        <div class="stat-label">
+          SESSIONS
+        </div>
+
+        <div
+          id="ownerStatSessions"
+          class="stat-number blue-text"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="card stat-card">
+
+        <div class="stat-label">
+          PRO
+        </div>
+
+        <div
+          id="ownerStatPro"
+          class="stat-number"
+        >
+          NO
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="owner-section">
+
+      <h2>
+        Command Center
+      </h2>
+
+      <div class="command-box">
+
+        <input
+          id="commandInput"
+          class="command-input"
+          placeholder="Type a command..."
+          onkeydown="
+            if(event.key==='Enter'){
+              runCommand();
+            }
+          "
+        >
+
+        <div class="buttons">
+
+          <button
+            class="btn"
+            onclick="runCommand()"
+          >
+            RUN COMMAND
+          </button>
+
+          <button
+            class="btn secondary"
+            onclick="showCommandHelp()"
+          >
+            HELP
+          </button>
+
+          <button
+            class="btn secondary"
+            onclick="clearCommandOutput()"
+          >
+            CLEAR
+          </button>
+
+        </div>
+
+        <div
+          id="commandOutput"
+          class="command-output"
+        >
+MuscleMode Owner Command Center
+Type "help" to see all commands.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="owner-section">
+
+      <h2>
+        Quick Controls
+      </h2>
+
+      <div class="grid">
+
+
+        <div class="owner-card">
+
+          <h3>
+            Change Name
+          </h3>
+
+          <input
+            id="ownerName"
+            placeholder="New name"
+          >
+
+          <button
+            class="btn"
+            onclick="ownerSetName()"
+          >
+            CHANGE NAME
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            XP
+          </h3>
+
+          <input
+            id="ownerXP"
+            type="number"
+            placeholder="XP amount"
+          >
+
+          <button
+            class="btn"
+            onclick="ownerSetXP()"
+          >
+            SET XP
+          </button>
+
+          <button
+            class="btn green"
+            onclick="ownerGiveXP()"
+          >
+            GIVE XP
+          </button>
+
+          <button
+            class="btn danger"
+            onclick="ownerRemoveXP()"
+          >
+            REMOVE XP
+          </button>
+
+          <button
+            class="btn purple"
+            onclick="ownerMaxXP()"
+          >
+            MAX XP
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            Level
+          </h3>
+
+          <input
+            id="ownerLevel"
+            type="number"
+            placeholder="Level"
+          >
+
+          <button
+            class="btn"
+            onclick="ownerSetLevel()"
+          >
+            SET LEVEL
+          </button>
+
+          <button
+            class="btn purple"
+            onclick="ownerLevel50()"
+          >
+            LEVEL 50
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            Streak
+          </h3>
+
+          <input
+            id="ownerStreak"
+            type="number"
+            placeholder="Streak"
+          >
+
+          <button
+            class="btn"
+            onclick="ownerSetStreak()"
+          >
+            SET STREAK
+          </button>
+
+          <button
+            class="btn orange"
+            onclick="ownerAddFreeze()"
+          >
+            + FREEZE
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            Sessions
+          </h3>
+
+          <input
+            id="ownerSessions"
+            type="number"
+            placeholder="Sessions"
+          >
+
+          <button
+            class="btn"
+            onclick="ownerSetSessions()"
+          >
+            SET SESSIONS
+          </button>
+
+          <button
+            class="btn green"
+            onclick="ownerAddSession()"
+          >
+            +1 SESSION
+          </button>
+
+          <button
+            class="btn blue"
+            onclick="ownerAddFiveSessions()"
+          >
+            +5 SESSIONS
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            Goal
+          </h3>
+
+          <input
+            id="ownerGoal"
+            placeholder="New goal"
+          >
+
+          <button
+            class="btn"
+            onclick="ownerSetGoal()"
+          >
+            CHANGE GOAL
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="owner-section">
+
+      <h2>
+        Unlocks
+      </h2>
+
+      <div class="grid">
+
+
+        <div class="owner-card">
+
+          <h3>
+            Membership
+          </h3>
+
+          <button
+            class="btn purple"
+            onclick="ownerActivatePro()"
+          >
+            ACTIVATE PRO
+          </button>
+
+          <button
+            class="btn secondary"
+            onclick="ownerRemovePro()"
+          >
+            REMOVE PRO
+          </button>
+
+          <button
+            class="btn orange"
+            onclick="ownerActivateElite()"
+          >
+            ACTIVATE ELITE
+          </button>
+
+          <button
+            class="btn blue"
+            onclick="ownerActivateProTitle()"
+          >
+            PRO TITLE
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            Workout Packs
+          </h3>
+
+          <button
+            class="btn"
+            onclick="ownerUnlockStrength()"
+          >
+            UNLOCK STRENGTH
+          </button>
+
+          <button
+            class="btn orange"
+            onclick="ownerUnlockConditioning()"
+          >
+            UNLOCK CONDITIONING
+          </button>
+
+          <button
+            class="btn purple"
+            onclick="ownerUnlockEverything()"
+          >
+            UNLOCK EVERYTHING
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            Themes
+          </h3>
+
+          <button
+            class="btn"
+            onclick="ownerTheme('red')"
+          >
+            RED
+          </button>
+
+          <button
+            class="btn purple"
+            onclick="ownerTheme('purple')"
+          >
+            PURPLE
+          </button>
+
+          <button
+            class="btn blue"
+            onclick="ownerTheme('blue')"
+          >
+            BLUE
+          </button>
+
+          <button
+            class="btn green"
+            onclick="ownerTheme('green')"
+          >
+            GREEN
+          </button>
+
+          <button
+            class="btn orange"
+            onclick="ownerTheme('orange')"
+          >
+            ORANGE
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="owner-section">
+
+      <h2>
+        Website
+      </h2>
+
+      <div class="grid">
+
+
+        <div class="owner-card">
+
+          <h3>
+            Announcement
+          </h3>
+
+          <input
+            id="ownerAnnouncement"
+            placeholder="Type announcement"
+          >
+
+          <button
+            class="btn"
+            onclick="ownerPostAnnouncement()"
+          >
+            POST
+          </button>
+
+          <button
+            class="btn secondary"
+            onclick="ownerRemoveAnnouncement()"
+          >
+            REMOVE
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            Account Mode
+          </h3>
+
+          <button
+            class="btn blue"
+            onclick="ownerGuestMode()"
+          >
+            GUEST MODE
+          </button>
+
+          <button
+            class="btn green"
+            onclick="ownerLocalProfile()"
+          >
+            LOCAL PROFILE
+          </button>
+
+        </div>
+
+
+        <div class="owner-card">
+
+          <h3>
+            Reset
+          </h3>
+
+          <button
+            class="btn orange"
+            onclick="ownerResetChallenges()"
+          >
+            RESET CHALLENGES
+          </button>
+
+          <button
+            class="btn danger"
+            onclick="ownerResetEverything()"
+          >
+            RESET EVERYTHING
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  MUSCLEMODE • TRAIN HARD • STAY CONSISTENT
+</footer>
+
+
+<!-- =========================================
+     WORKOUT MODAL
+========================================= -->
+
+<div
+  id="workoutModal"
+  class="modal-bg"
+>
+
+  <div class="modal">
+
+    <h2 id="modalWorkoutName">
+      Workout
+    </h2>
+
+    <div
+      id="modalExercises"
+      class="list"
+    ></div>
+
+    <div class="buttons">
+
+      <button
+        class="btn"
+        onclick="startWorkoutFromModal()"
+      >
+        START SESSION
+      </button>
+
+      <button
+        class="btn secondary"
+        onclick="closeModal()"
+      >
+        CLOSE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================
+     TIMER MODAL
+========================================= -->
+
+<div
+  id="timerModal"
+  class="modal-bg"
+>
+
+  <div class="modal timer">
+
+    <div
+      id="timerExerciseName"
+      class="timer-name"
+    >
+      Exercise
+    </div>
+
+    <div
+      id="timerSeconds"
+      class="timer-number"
+    >
+      30
+    </div>
+
+    <div class="progress-track">
+
+      <div
+        id="timerFill"
+        class="progress-bar"
+      ></div>
+
+    </div>
+
+    <div
+      class="buttons"
+      style="justify-content:center;"
+    >
+
+      <button
+        id="pauseTimerButton"
+        class="btn"
+        onclick="pauseTimer()"
+      >
+        PAUSE
+      </button>
+
+      <button
+        class="btn blue"
+        onclick="skipExercise()"
+      >
+        SKIP
+      </button>
+
+      <button
+        class="btn secondary"
+        onclick="exitTimer()"
+      >
+        EXIT
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================
+     COMPLETE MODAL
+========================================= -->
+
+<div
+  id="completeModal"
+  class="modal-bg"
+>
+
+  <div class="modal">
+
+    <h2>
+      Workout Complete
+    </h2>
+
+    <p class="subtext">
+      Nice work. Save your session.
+    </p>
+
+    <label
+      style="margin-top:15px;"
+    >
+
+      Rating
+
+      <select id="sessionRating">
+
+        <option value="5">
+          ★★★★★
+        </option>
+
+        <option value="4">
+          ★★★★☆
+        </option>
+
+        <option value="3">
+          ★★★☆☆
+        </option>
+
+        <option value="2">
+          ★★☆☆☆
+        </option>
+
+        <option value="1">
+          ★☆☆☆☆
+        </option>
+
+      </select>
+
+    </label>
+
+    <label
+      style="margin-top:12px;"
+    >
+
+      Note
+
+      <textarea
+        id="sessionNote"
+        rows="4"
+        placeholder="How did the workout feel?"
+      ></textarea>
+
+    </label>
+
+    <div class="buttons">
+
+      <button
+        class="btn"
+        onclick="saveCompletedSession()"
+      >
+        SAVE SESSION
+      </button>
+
+      <button
+        class="btn secondary"
+        onclick="closeComplete()"
+      >
+        CLOSE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   OWNER PIN
+========================================= */
+
+const OWNER_PIN = "MUSCLEMODE";
+
+
+/* =========================================
+   DATA
+========================================= */
+
+function defaultData(){
+
+  return {
+
+    profile:{
+      name:"User",
+      goal:"Build Strength"
+    },
+
+    xp:0,
+    level:1,
+    levelManuallySet:false,
+
+    streak:0,
+    streakFreezes:0,
+    sessions:0,
+
+    favorites:[],
+
+    pro:false,
+    elite:false,
+    proTitleOwned:false,
+
+    strengthPack:false,
+    conditioningPack:false,
+
+    guestMode:false,
+    sound:true,
+
+    announcement:"",
+
+    goalProgress:0,
+
+    checkIn:{
+      energy:"medium",
+      mood:"okay",
+      sleep:"okay"
+    },
+
+    measurements:{
+      weight:"",
+      chest:"",
+      waist:"",
+      arms:""
+    },
+
+    progressPhoto:"",
+
+    records:[],
+    history:[],
+    completedChallenges:[],
+
+    theme:"red",
+
+    currentTrainerPlan:null
+
+  };
+
+}
+
+
+function loadData(){
+
+  const saved =
+    localStorage.getItem(
+      "muscleModeData"
+    );
+
+  if(!saved){
+    return defaultData();
+  }
+
+  try{
+
+    const parsed =
+      JSON.parse(saved);
+
+    const fresh =
+      defaultData();
+
+    return {
+
+      ...fresh,
+      ...parsed,
+
+      profile:{
+        ...fresh.profile,
+        ...(parsed.profile || {})
+      },
+
+      checkIn:{
+        ...fresh.checkIn,
+        ...(parsed.checkIn || {})
+      },
+
+      measurements:{
+        ...fresh.measurements,
+        ...(parsed.measurements || {})
+      }
+
+    };
+
+  }catch{
+
+    return defaultData();
+
+  }
+
+}
+
+
+let data =
+  loadData();
+
+
+function saveData(){
+
+  localStorage.setItem(
+    "muscleModeData",
+    JSON.stringify(data)
+  );
+
+}
+
+
+/* =========================================
+   WORKOUTS
+========================================= */
+
+const baseWorkouts = [
+
+  {
+    id:"push",
+    name:"Beginner Push",
+    category:"chest",
+    difficulty:"beginner",
+    description:"A simple chest and triceps workout.",
+    exercises:[
+      ["Wall Push-Ups",30],
+      ["Incline Push-Ups",30],
+      ["Knee Push-Ups",30],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"chest",
+    name:"Chest Power",
+    category:"chest",
+    difficulty:"intermediate",
+    description:"Build pressing strength.",
+    exercises:[
+      ["Push-Ups",35],
+      ["Wide Push-Ups",35],
+      ["Diamond Push-Ups",30],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"back",
+    name:"Back Builder",
+    category:"back",
+    difficulty:"beginner",
+    description:"Train your upper back.",
+    exercises:[
+      ["Superman",30],
+      ["Bird Dog",30],
+      ["Reverse Snow Angel",30],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"legs",
+    name:"Leg Builder",
+    category:"legs",
+    difficulty:"beginner",
+    description:"Build stronger legs.",
+    exercises:[
+      ["Bodyweight Squats",40],
+      ["Reverse Lunges",30],
+      ["Glute Bridges",35],
+      ["Calf Raises",30],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"legpower",
+    name:"Leg Power",
+    category:"legs",
+    difficulty:"advanced",
+    description:"A harder lower-body session.",
+    exercises:[
+      ["Squat Pulses",35],
+      ["Jump Squats",30],
+      ["Lunges",40],
+      ["Glute Bridges",40],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"core",
+    name:"Core Starter",
+    category:"core",
+    difficulty:"beginner",
+    description:"Build basic core strength.",
+    exercises:[
+      ["Plank",30],
+      ["Dead Bug",30],
+      ["Crunches",30],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"corehard",
+    name:"Core Crusher",
+    category:"core",
+    difficulty:"advanced",
+    description:"A challenging core workout.",
+    exercises:[
+      ["Plank",45],
+      ["Mountain Climbers",40],
+      ["Leg Raises",35],
+      ["Bicycle Crunches",40],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"arms",
+    name:"Arm Builder",
+    category:"arms",
+    difficulty:"beginner",
+    description:"Train your arms and shoulders.",
+    exercises:[
+      ["Arm Circles",30],
+      ["Close Push-Ups",30],
+      ["Plank Shoulder Taps",30],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"shoulders",
+    name:"Shoulder Builder",
+    category:"shoulders",
+    difficulty:"beginner",
+    description:"Build shoulder control.",
+    exercises:[
+      ["Arm Circles",30],
+      ["Pike Hold",25],
+      ["Plank Shoulder Taps",30],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"conditioning",
+    name:"Conditioning Blast",
+    category:"conditioning",
+    difficulty:"intermediate",
+    description:"Improve conditioning.",
+    exercises:[
+      ["Jumping Jacks",40],
+      ["High Knees",35],
+      ["Mountain Climbers",35],
+      ["Burpees",30],
+      ["Rest",20]
+    ]
+  },
+
+  {
+    id:"fullbody",
+    name:"Full Body",
+    category:"conditioning",
+    difficulty:"beginner",
+    description:"Train your whole body.",
+    exercises:[
+      ["Squats",35],
+      ["Push-Ups",30],
+      ["Plank",30],
+      ["Lunges",30],
+      ["Rest",20]
+    ]
+  }
+
+];
+
+
+const strengthPack = [
+
+  {
+    id:"strength1",
+    name:"Strength Pack",
+    category:"chest",
+    difficulty:"advanced",
+    description:"Advanced strength training.",
+    exercises:[
+      ["Slow Push-Ups",45],
+      ["Diamond Push-Ups",40],
+      ["Wide Push-Ups",40],
+      ["Rest",25]
+    ]
+  },
+
+  {
+    id:"strength2",
+    name:"Leg Strength",
+    category:"legs",
+    difficulty:"advanced",
+    description:"Advanced lower-body strength.",
+    exercises:[
+      ["Slow Squats",45],
+      ["Reverse Lunges",40],
+      ["Squat Hold",40],
+      ["Rest",25]
+    ]
+  }
+
+];
+
+
+const conditioningPack = [
+
+  {
+    id:"cond1",
+    name:"Conditioning Elite",
+    category:"conditioning",
+    difficulty:"advanced",
+    description:"High-intensity conditioning.",
+    exercises:[
+      ["Burpees",40],
+      ["High Knees",40],
+      ["Mountain Climbers",40],
+      ["Jump Squats",35],
+      ["Rest",20]
+    ]
+  }
+
+];
+
+
+function getAllWorkouts(){
+
+  let list = [
+    ...baseWorkouts
+  ];
+
+  if(data.strengthPack){
+    list.push(...strengthPack);
+  }
+
+  if(data.conditioningPack){
+    list.push(...conditioningPack);
+  }
+
+  return list;
+
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function showPage(pageId){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page =>
+      page.classList.remove("active")
+    );
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(button =>
+      button.classList.remove("active")
+    );
+
+  const page =
+    document.getElementById(pageId);
+
+  if(page){
+    page.classList.add("active");
+  }
+
+  const activeButton =
+    [...document.querySelectorAll(".nav button")]
+      .find(btn =>
+        btn.getAttribute("onclick") ===
+        `showPage('${pageId}')`
+      );
+
+  if(activeButton){
+    activeButton.classList.add("active");
+  }
+
+  if(pageId === "workouts"){
+    renderWorkouts();
+  }
+
+  if(pageId === "favorites"){
+    renderFavorites();
+  }
+
+  if(pageId === "progress"){
+    refreshProgress();
+  }
+
+  if(pageId === "profile"){
+    refreshProfile();
+  }
+
+  if(pageId === "challenges"){
+    refreshChallenges();
+  }
+
+  if(pageId === "leaderboard"){
+    refreshLeaderboard();
+  }
+
+}
+
+
+/* =========================================
+   LEVEL SYSTEM
+========================================= */
+
+function calculateLevel(){
+
+  return Math.max(
+    1,
+    Math.floor(
+      data.xp / 500
+    ) + 1
+  );
+
+}
+
+
+function updateLevelFromXP(){
+
+  if(!data.levelManuallySet){
+
+    data.level =
+      calculateLevel();
+
+  }
+
+}
+
+
+function levelTitle(level){
+
+  if(
+    data.pro ||
+    data.proTitleOwned
+  ){
+    return "PRO ATHLETE";
+  }
+
+  if(level >= 50){
+    return "LEGEND";
+  }
+
+  if(level >= 25){
+    return "ELITE";
+  }
+
+  if(level >= 10){
+    return "ATHLETE";
+  }
+
+  if(level >= 5){
+    return "DEDICATED";
+  }
+
+  return "STARTER";
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================
+   WORKOUT CARDS
+========================================= */
+
+function workoutCard(workout){
+
+  const favorite =
+    data.favorites.includes(
+      workout.id
+    );
+
+  return `
+
+    <div class="card workout-card">
+
+      <div>
+
+        <div class="workout-top">
+
+          <div>
+
+            <div class="tags">
+
+              <span class="tag">
+                ${escapeHTML(workout.category)}
+              </span>
+
+              <span class="tag">
+                ${escapeHTML(workout.difficulty)}
+              </span>
+
+            </div>
+
+          </div>
+
+          <button
+            class="favorite"
+            onclick="toggleFavorite('${workout.id}')"
+          >
+            ${favorite ? "★" : "☆"}
+          </button>
+
+        </div>
+
+        <h3>
+          ${escapeHTML(workout.name)}
+        </h3>
+
+        <p class="subtext">
+          ${escapeHTML(workout.description)}
+        </p>
+
+        <p
+          class="subtext"
+          style="margin-top:8px;"
+        >
+          ${workout.exercises.length}
+          exercises
+        </p>
+
+      </div>
+
+      <div class="spacer"></div>
+
+      <button
+        class="btn"
+        onclick="openWorkout('${workout.id}')"
+      >
+        VIEW WORKOUT
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+function renderWorkouts(){
+
+  const grid =
+    document.getElementById(
+      "workoutGrid"
+    );
+
+  const search =
+    document.getElementById(
+      "workoutSearch"
+    ).value.toLowerCase();
+
+  const category =
+    document.getElementById(
+      "workoutCategory"
+    ).value;
+
+  const difficulty =
+    document.getElementById(
+      "workoutDifficulty"
+    ).value;
+
+  const filtered =
+    getAllWorkouts()
+      .filter(workout => {
+
+        return (
+
+          workout.name
+            .toLowerCase()
+            .includes(search)
+
+          &&
+
+          (
+            category === "all" ||
+            workout.category === category
+          )
+
+          &&
+
+          (
+            difficulty === "all" ||
+            workout.difficulty === difficulty
+          )
+
+        );
+
+      });
+
+  grid.innerHTML =
+    filtered.length
+      ? filtered.map(workoutCard).join("")
+      : `
+        <div class="card">
+          <h3>
+            No workouts found
+          </h3>
+        </div>
+      `;
+
+}
+
+
+function renderHomeWorkouts(){
+
+  document.getElementById(
+    "homeWorkouts"
+  ).innerHTML =
+    getAllWorkouts()
+      .slice(0,6)
+      .map(workoutCard)
+      .join("");
+
+}
+
+
+function toggleFavorite(id){
+
+  if(
+    data.favorites.includes(id)
+  ){
+
+    data.favorites =
+      data.favorites.filter(
+        item => item !== id
+      );
+
+  }else{
+
+    data.favorites.push(id);
+
+  }
+
+  saveData();
+
+  renderWorkouts();
+  renderFavorites();
+  renderHomeWorkouts();
+  refreshHome();
+
+}
+
+
+function renderFavorites(){
+
+  const grid =
+    document.getElementById(
+      "favoriteGrid"
+    );
+
+  const favorites =
+    getAllWorkouts()
+      .filter(workout =>
+        data.favorites.includes(
+          workout.id
+        )
+      );
+
+  grid.innerHTML =
+    favorites.length
+
+      ? favorites.map(workoutCard).join("")
+
+      : `
+        <div class="card">
+          <h3>
+            No saved workouts
+          </h3>
+
+          <p class="subtext">
+            Press ☆ to save a workout.
+          </p>
+
+        </div>
+      `;
+
+}
+
+
+/* =========================================
+   WORKOUT MODAL
+========================================= */
+
+let selectedWorkout = null;
+
+function openWorkout(id){
+
+  selectedWorkout =
+    getAllWorkouts().find(
+      workout =>
+        workout.id === id
+    );
+
+  if(!selectedWorkout){
+    return;
+  }
+
+  document.getElementById(
+    "modalWorkoutName"
+  ).textContent =
+    selectedWorkout.name;
+
+  document.getElementById(
+    "modalExercises"
+  ).innerHTML =
+    selectedWorkout.exercises
+      .map(
+        (exercise,index) => `
+
+          <div class="list-item">
+
+            <b>
+              ${index + 1}.
+              ${escapeHTML(exercise[0])}
+            </b>
+
+            <div class="subtext">
+              ${exercise[1]} seconds
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+  document
+    .getElementById("workoutModal")
+    .classList.add("show");
+
+}
+
+
+function closeModal(){
+
+  document
+    .getElementById("workoutModal")
+    .classList.remove("show");
+
+}
+
+
+function startWorkoutFromModal(){
+
+  if(!selectedWorkout){
+    return;
+  }
+
+  closeModal();
+
+  startWorkout(
+    selectedWorkout
+  );
+
+}
+
+
+/* =========================================
+   TIMER
+========================================= */
+
+let currentWorkout = null;
+let currentExercises = [];
+let currentExerciseIndex = 0;
+
+let timerSeconds = 0;
+let timerTotal = 0;
+let timerRunning = false;
+let timerInterval = null;
+
+
+function startWorkout(workout){
+
+  currentWorkout =
+    workout;
+
+  currentExercises =
+    workout.exercises;
+
+  currentExerciseIndex =
+    0;
+
+  document
+    .getElementById("timerModal")
+    .classList.add("show");
+
+  loadExercise();
+
+}
+
+
+function loadExercise(){
+
+  clearInterval(timerInterval);
+
+  if(
+    currentExerciseIndex >=
+    currentExercises.length
+  ){
+
+    finishWorkout();
+
+    return;
+
+  }
+
+  const exercise =
+    currentExercises[
+      currentExerciseIndex
+    ];
+
+  document.getElementById(
+    "timerExerciseName"
+  ).textContent =
+    exercise[0];
+
+  timerSeconds =
+    exercise[1];
+
+  timerTotal =
+    exercise[1];
+
+  timerRunning =
+    true;
+
+  document.getElementById(
+    "pauseTimerButton"
+  ).textContent =
+    "PAUSE";
+
+  updateTimer();
+
+  timerInterval =
+    setInterval(() => {
+
+      if(!timerRunning){
+        return;
+      }
+
+      timerSeconds--;
+
+      updateTimer();
+
+      if(
+        timerSeconds <= 0
+      ){
+
+        currentExerciseIndex++;
+
+        loadExercise();
+
+      }
+
+    },1000);
+
+}
+
+
+function updateTimer(){
+
+  document.getElementById(
+    "timerSeconds"
+  ).textContent =
+    Math.max(
+      0,
+      timerSeconds
+    );
+
+  const percent =
+    (
+      (timerTotal - timerSeconds) /
+      timerTotal
+    ) * 100;
+
+  document.getElementById(
+    "timerFill"
+  ).style.width =
+    `${percent}%`;
+
+}
+
+
+function pauseTimer(){
+
+  timerRunning =
+    !timerRunning;
+
+  document.getElementById(
+    "pauseTimerButton"
+  ).textContent =
+    timerRunning
+      ? "PAUSE"
+      : "RESUME";
+
+}
+
+
+function skipExercise(){
+
+  currentExerciseIndex++;
+
+  loadExercise();
+
+}
+
+
+function exitTimer(){
+
+  clearInterval(
+    timerInterval
+  );
+
+  timerRunning =
+    false;
+
+  document
+    .getElementById("timerModal")
+    .classList.remove("show");
+
+}
+
+
+function finishWorkout(){
+
+  clearInterval(
+    timerInterval
+  );
+
+  timerRunning =
+    false;
+
+  document
+    .getElementById("timerModal")
+    .classList.remove("show");
+
+  data.xp += 100;
+
+  data.sessions++;
+
+  data.streak++;
+
+  data.goalProgress =
+    Math.min(
+      100,
+      data.goalProgress + 5
+    );
+
+  data.levelManuallySet =
+    false;
+
+  updateLevelFromXP();
+
+  saveData();
+
+  refreshEverything();
+
+  document
+    .getElementById("completeModal")
+    .classList.add("show");
+
+}
+
+
+function closeComplete(){
+
+  document
+    .getElementById("completeModal")
+    .classList.remove("show");
+
+}
+
+
+function saveCompletedSession(){
+
+  data.history.unshift({
+
+    workout:
+      currentWorkout
+        ? currentWorkout.name
+        : "Workout",
+
+    date:
+      new Date()
+        .toLocaleDateString(),
+
+    rating:
+      document.getElementById(
+        "sessionRating"
+      ).value,
+
+    note:
+      document.getElementById(
+        "sessionNote"
+      ).value.trim()
+
+  });
+
+  data.history =
+    data.history.slice(
+      0,
+      50
+    );
+
+  saveData();
+
+  closeComplete();
+
+  refreshEverything();
+
+}
+
+
+/* =========================================
+   CHECK IN
+========================================= */
+
+function saveCheckIn(){
+
+  data.checkIn.energy =
+    document.getElementById(
+      "checkEnergy"
+    ).value;
+
+  data.checkIn.mood =
+    document.getElementById(
+      "checkMood"
+    ).value;
+
+  data.checkIn.sleep =
+    document.getElementById(
+      "checkSleep"
+    ).value;
+
+  saveData();
+
+  recommendedWorkout();
+
+}
+
+
+function recommendedWorkout(){
+
+  let message;
+
+  if(
+    data.checkIn.energy === "low"
+  ){
+
+    message =
+      "Your energy is low. Try Core Starter or Beginner Push.";
+
+  }else if(
+    data.checkIn.energy === "high"
+  ){
+
+    message =
+      "Your energy is high. Try Leg Power or Core Crusher.";
+
+  }else{
+
+    message =
+      "Your energy is balanced. Try Full Body or Chest Power.";
+
+  }
+
+  document.getElementById(
+    "recommendation"
+  ).textContent =
+    message;
+
+}
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+function refreshProgress(){
+
+  updateLevelFromXP();
+
+  const xp =
+    data.xp % 500;
+
+  const percent =
+    (xp / 500) * 100;
+
+  document.getElementById(
+    "progressLevel"
+  ).textContent =
+    data.level;
+
+  document.getElementById(
+    "progressLevelTitle"
+  ).textContent =
+    levelTitle(data.level);
+
+  document.getElementById(
+    "xpFill"
+  ).style.width =
+    `${percent}%`;
+
+  document.getElementById(
+    "xpText"
+  ).textContent =
+    `${xp} / 500 XP`;
+
+  document.getElementById(
+    "goalText"
+  ).textContent =
+    data.profile.goal;
+
+  document.getElementById(
+    "goalFill"
+  ).style.width =
+    `${Math.min(100,data.goalProgress)}%`;
+
+  document.getElementById(
+    "goalProgress"
+  ).textContent =
+    `${Math.min(100,data.goalProgress)}%`;
+
+  document.getElementById(
+    "streakNumber"
+  ).textContent =
+    `${data.streak} Day Streak`;
+
+  document.getElementById(
+    "freezeNumber"
+  ).textContent =
+    data.streakFreezes;
+
+  document.getElementById(
+    "measureWeight"
+  ).value =
+    data.measurements.weight;
+
+  document.getElementById(
+    "measureChest"
+  ).value =
+    data.measurements.chest;
+
+  document.getElementById(
+    "measureWaist"
+  ).value =
+    data.measurements.waist;
+
+  document.getElementById(
+    "measureArms"
+  ).value =
+    data.measurements.arms;
+
+  if(data.progressPhoto){
+
+    document.getElementById(
+      "photoPreview"
+    ).src =
+      data.progressPhoto;
+
+    document.getElementById(
+      "photoPreview"
+    ).style.display =
+      "block";
+
+  }
+
+  refreshRecords();
+  refreshHistory();
+
+}
+
+
+function saveMeasurements(){
+
+  data.measurements.weight =
+    document.getElementById(
+      "measureWeight"
+    ).value;
+
+  data.measurements.chest =
+    document.getElementById(
+      "measureChest"
+    ).value;
+
+  data.measurements.waist =
+    document.getElementById(
+      "measureWaist"
+    ).value;
+
+  data.measurements.arms =
+    document.getElementById(
+      "measureArms"
+    ).value;
+
+  saveData();
+
+}
+
+
+function saveProgressPhoto(){
+
+  const file =
+    document.getElementById(
+      "progressPhoto"
+    ).files[0];
+
+  if(!file){
+    return;
+  }
+
+  const reader =
+    new FileReader();
+
+  reader.onload =
+    function(event){
+
+      data.progressPhoto =
+        event.target.result;
+
+      saveData();
+
+      refreshProgress();
+
+    };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+function saveRecord(){
+
+  const exercise =
+    document.getElementById(
+      "recordExercise"
+    ).value.trim();
+
+  const weight =
+    Number(
+      document.getElementById(
+        "recordWeight"
+      ).value
+    );
+
+  if(
+    !exercise ||
+    !weight
+  ){
+    return;
+  }
+
+  data.records.push({
+
+    exercise,
+    weight,
+
+    date:
+      new Date()
+        .toLocaleDateString()
+
+  });
+
+  saveData();
+
+  refreshProgress();
+
+}
+
+
+function refreshRecords(){
+
+  const list =
+    document.getElementById(
+      "recordsList"
+    );
+
+  list.innerHTML =
+    data.records.length
+
+      ? data.records
+        .map(
+          record => `
+
+            <div class="list-item">
+
+              <b>
+                ${escapeHTML(
+                  record.exercise
+                )}
+              </b>
+
+              <div class="subtext">
+                ${record.weight}
+                •
+                ${record.date}
+              </div>
+
+            </div>
+
+          `
+        )
+        .join("")
+
+      : `
+        <div class="list-item">
+          No records yet.
+        </div>
+      `;
+
+}
+
+
+function refreshHistory(){
+
+  const list =
+    document.getElementById(
+      "historyList"
+    );
+
+  list.innerHTML =
+    data.history.length
+
+      ? data.history
+        .map(
+          item => `
+
+            <div class="list-item">
+
+              <b>
+                ${escapeHTML(
+                  item.workout
+                )}
+              </b>
+
+              <div class="subtext">
+                ${item.date}
+                •
+                ${item.rating}/5
+              </div>
+
+              ${
+                item.note
+                  ? `
+                    <div style="margin-top:7px;">
+                      ${escapeHTML(
+                        item.note
+                      )}
+                    </div>
+                  `
+                  : ""
+              }
+
+            </div>
+
+          `
+        )
+        .join("")
+
+      : `
+        <div class="list-item">
+          No training history yet.
+        </div>
+      `;
+
+}
+
+
+/* =========================================
+   AI TRAINER CHAT
+========================================= */
+
+function addAIMessage(
+  text,
+  user = false
+){
+
+  const messages =
+    document.getElementById(
+      "aiMessages"
+    );
+
+  const message =
+    document.createElement("div");
+
+  message.className =
+    user
+      ? "ai-message user-message"
+      : "ai-message trainer-message";
+
+  message.innerHTML = `
+
+    <div class="ai-avatar ${user ? "user-avatar" : ""}">
+      ${user ? "U" : "M"}
+    </div>
+
+    <div class="message-content">
+
+      <b>
+        ${
+          user
+            ? "You"
+            : "MuscleMode Trainer"
+        }
+      </b>
+
+      <p></p>
+
+    </div>
+
+  `;
+
+  message
+    .querySelector("p")
+    .textContent =
+    text;
+
+  messages.appendChild(
+    message
+  );
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+}
+
+
+function sendAIMessage(){
+
+  const input =
+    document.getElementById(
+      "aiInput"
+    );
+
+  const text =
+    input.value.trim();
+
+  if(!text){
+    return;
+  }
+
+  addAIMessage(
+    text,
+    true
+  );
+
+  input.value = "";
+
+  setTimeout(() => {
+
+    const reply =
+      getAITrainerReply(
+        text
+      );
+
+    addAIMessage(
+      reply
+    );
+
+  },400);
+
+}
+
+
+function quickAI(text){
+
+  document.getElementById(
+    "aiInput"
+  ).value =
+    text;
+
+  sendAIMessage();
+
+}
+
+
+/* =========================================
+   AI TRAINER ANSWERS
+========================================= */
+
+function getAITrainerReply(message){
+
+  const text =
+    message.toLowerCase();
+
+
+  if(
+    text.includes("hello") ||
+    text.includes("hi") ||
+    text.includes("hey")
+  ){
+
+    return `
+Hey! 👋
+
+I'm your MuscleMode AI Trainer.
+
+Tell me what you want to train and I'll help you.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("today") ||
+    text.includes("workout")
+  ){
+
+    if(
+      data.checkIn.energy === "low"
+    ){
+
+      return `
+Your energy is low today.
+
+Let's keep today's workout easier:
+
+• Beginner Push
+• Core Starter
+• Full Body
+
+Focus on controlled reps instead of rushing.
+      `.trim();
+
+    }
+
+    return `
+🔥 TODAY'S WORKOUT
+
+Full Body
+
+1. Squats
+2. Push-Ups
+3. Plank
+4. Lunges
+5. Glute Bridges
+
+Complete the workout to earn +100 XP.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("chest")
+  ){
+
+    return `
+🔥 CHEST WORKOUT
+
+1. Push-Ups — 30 sec
+2. Wide Push-Ups — 30 sec
+3. Knee Push-Ups — 30 sec
+4. Rest — 20 sec
+
+Keep your body controlled and focus on form.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("leg")
+  ){
+
+    return `
+🦵 LEG WORKOUT
+
+1. Bodyweight Squats — 40 sec
+2. Reverse Lunges — 30 sec
+3. Glute Bridges — 35 sec
+4. Calf Raises — 30 sec
+5. Rest — 20 sec
+
+Stay controlled through every rep.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("ab") ||
+    text.includes("core")
+  ){
+
+    return `
+💪 CORE WORKOUT
+
+1. Plank — 30 sec
+2. Dead Bug — 30 sec
+3. Crunches — 30 sec
+4. Rest — 20 sec
+
+Keep your core tight during each exercise.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("arm") ||
+    text.includes("bicep") ||
+    text.includes("tricep")
+  ){
+
+    return `
+💪 ARM WORKOUT
+
+1. Arm Circles — 30 sec
+2. Close Push-Ups — 30 sec
+3. Plank Shoulder Taps — 30 sec
+4. Rest — 20 sec
+
+Use slow and controlled movements.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("back")
+  ){
+
+    return `
+🔙 BACK WORKOUT
+
+1. Superman — 30 sec
+2. Bird Dog — 30 sec
+3. Reverse Snow Angel — 30 sec
+4. Rest — 20 sec
+
+Focus on control instead of speed.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("shoulder")
+  ){
+
+    return `
+🔥 SHOULDER WORKOUT
+
+1. Arm Circles — 30 sec
+2. Pike Hold — 25 sec
+3. Plank Shoulder Taps — 30 sec
+4. Rest — 20 sec
+
+Keep your movements controlled.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("xp")
+  ){
+
+    return `
+⭐ YOUR XP
+
+XP: ${data.xp}
+Level: ${data.level}
+Sessions: ${data.sessions}
+Streak: ${data.streak} days
+
+Complete workouts to keep earning XP.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("progress") ||
+    text.includes("stats")
+  ){
+
+    return `
+📊 YOUR PROGRESS
+
+Level: ${data.level}
+XP: ${data.xp}
+Sessions: ${data.sessions}
+Streak: ${data.streak} days
+Goal: ${data.profile.goal}
+
+Keep building consistency.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("level")
+  ){
+
+    return `
+⭐ YOUR LEVEL
+
+You are currently Level ${data.level}.
+
+Title:
+${levelTitle(data.level)}
+
+Keep completing workouts to gain more XP.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("streak")
+  ){
+
+    return `
+🔥 YOUR STREAK
+
+Current streak:
+${data.streak} days
+
+Keep training consistently to increase it.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("plan")
+  ){
+
+    return `
+📋 TRAINING PLAN
+
+I can help you make a plan.
+
+Tell me something like:
+
+"Make me a 3 day workout plan."
+
+or
+
+"Make me a chest and legs plan."
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("strong")
+  ){
+
+    return `
+💪 BUILD STRENGTH
+
+Focus on:
+
+• Push-Ups
+• Squats
+• Lunges
+• Planks
+• Slow controlled reps
+
+Start with exercises you can perform with good form.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("muscle")
+  ){
+
+    return `
+💪 BUILD MUSCLE
+
+Focus on:
+
+• Consistent training
+• Controlled repetitions
+• Gradually harder workouts
+• Enough recovery
+
+Try to stay consistent with your weekly training.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("beginner")
+  ){
+
+    return `
+🟢 BEGINNER TRAINING
+
+Start with:
+
+• Beginner Push
+• Leg Builder
+• Core Starter
+• Full Body
+
+Build your strength gradually.
+    `.trim();
+
+  }
+
+
+  if(
+    text.includes("hard") ||
+    text.includes("harder")
+  ){
+
+    return `
+🔥 HARDER WORKOUT
+
+Try:
+
+• Chest Power
+• Leg Power
+• Core Crusher
+• Conditioning Blast
+
+Make sure you can handle the difficulty before increasing intensity.
+    `.trim();
+
+  }
+
+
+  return `
+I'm ready. 💪
+
+Try asking me:
+
+"Give me a workout"
+"Give me a chest workout"
+"Give me a leg workout"
+"Give me an ab workout"
+"How is my progress?"
+"How much XP do I have?"
+"What's my level?"
+"What's my streak?"
+"Make me a training plan"
+  `.trim();
+
+}
+
+
+/* =========================================
+   STORE
+========================================= */
+
+function applyTheme(){
+
+  const colors = {
+
+    red:"#ff2b2b",
+    purple:"#9b59ff",
+    blue:"#3498db",
+    green:"#2ecc71",
+    orange:"#ff8a2a"
+
+  };
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--accent",
+      colors[data.theme] ||
+      colors.red
+    );
+
+}
+
+
+function buyTheme(theme){
+
+  data.theme =
+    theme;
+
+  saveData();
+
+  applyTheme();
+
+}
+
+
+function activatePro(){
+
+  data.pro = true;
+  data.proTitleOwned = true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function unlockElite(){
+
+  data.elite = true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function unlockStrengthPack(){
+
+  data.strengthPack = true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function unlockConditioningPack(){
+
+  data.conditioningPack =
+    true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+/* =========================================
+   PROFILE
+========================================= */
+
+function refreshProfile(){
+
+  document.getElementById(
+    "profileName"
+  ).textContent =
+    data.profile.name;
+
+  document.getElementById(
+    "profileGoal"
+  ).textContent =
+    data.profile.goal;
+
+  document.getElementById(
+    "profileTitle"
+  ).textContent =
+    levelTitle(data.level);
+
+  document.getElementById(
+    "profileMode"
+  ).textContent =
+    data.guestMode
+      ? "GUEST MODE"
+      : "LOCAL PROFILE";
+
+  document.getElementById(
+    "soundButton"
+  ).textContent =
+    data.sound
+      ? "SOUND ON"
+      : "SOUND OFF";
+
+}
+
+
+function toggleSound(){
+
+  data.sound =
+    !data.sound;
+
+  saveData();
+
+  refreshProfile();
+
+}
+
+
+function trainingReminder(){
+
+  const time =
+    prompt(
+      "When should MuscleMode remind you?",
+      "5:00 PM"
+    );
+
+  if(time){
+
+    localStorage.setItem(
+      "muscleModeReminder",
+      time
+    );
+
+  }
+
+}
+
+
+function resetAllData(){
+
+  if(
+    !confirm(
+      "Reset all MuscleMode data?"
+    )
+  ){
+    return;
+  }
+
+  data =
+    defaultData();
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+/* =========================================
+   CHALLENGES
+========================================= */
+
+const challenges = [
+
+  {
+    id:"first",
+    name:"First Session",
+    description:"Complete 1 workout.",
+    reward:50,
+    check:() =>
+      data.sessions >= 1
+  },
+
+  {
+    id:"three",
+    name:"Getting Started",
+    description:"Complete 3 workouts.",
+    reward:100,
+    check:() =>
+      data.sessions >= 3
+  },
+
+  {
+    id:"xp500",
+    name:"XP Hunter",
+    description:"Reach 500 XP.",
+    reward:200,
+    check:() =>
+      data.xp >= 500
+  },
+
+  {
+    id:"streak7",
+    name:"7 Day Streak",
+    description:"Reach a 7 day streak.",
+    reward:300,
+    check:() =>
+      data.streak >= 7
+  },
+
+  {
+    id:"sessions10",
+    name:"10 Sessions",
+    description:"Complete 10 workouts.",
+    reward:400,
+    check:() =>
+      data.sessions >= 10
+  }
+
+];
+
+
+function refreshChallenges(){
+
+  const list =
+    document.getElementById(
+      "challengeList"
+    );
+
+  list.innerHTML =
+    challenges
+      .map(challenge => {
+
+        const completed =
+          data.completedChallenges
+            .includes(
+              challenge.id
+            );
+
+        return `
+
+          <div class="card">
+
+            <h3>
+              ${challenge.name}
+            </h3>
+
+            <p class="subtext">
+              ${challenge.description}
+            </p>
+
+            <p
+              class="red"
+              style="margin-top:10px;"
+            >
+              +${challenge.reward} XP
+            </p>
+
+            <button
+              class="btn"
+              style="margin-top:12px;"
+              onclick="claimChallenge('${challenge.id}')"
+            >
+              ${
+                completed
+                  ? "CLAIMED"
+                  : "CHECK"
+              }
+            </button>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+function claimChallenge(id){
+
+  const challenge =
+    challenges.find(
+      item =>
+        item.id === id
+    );
+
+  if(!challenge){
+    return;
+  }
+
+  if(
+    data.completedChallenges
+      .includes(id)
+  ){
+    return;
+  }
+
+  if(
+    !challenge.check()
+  ){
+
+    alert(
+      "Challenge not completed yet."
+    );
+
+    return;
+
+  }
+
+  data.completedChallenges
+    .push(id);
+
+  data.xp +=
+    challenge.reward;
+
+  data.levelManuallySet =
+    false;
+
+  updateLevelFromXP();
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+/* =========================================
+   LEADERBOARD
+========================================= */
+
+function refreshLeaderboard(){
+
+  const list =
+    document.getElementById(
+      "leaderboardList"
+    );
+
+  const users = [
+
+    {
+      name:"PowerKing",
+      xp:4520
+    },
+
+    {
+      name:"IronMode",
+      xp:3810
+    },
+
+    {
+      name:"FitLegend",
+      xp:2970
+    },
+
+    {
+      name:"WorkoutPro",
+      xp:2100
+    },
+
+    {
+      name:
+        data.profile.name +
+        " (YOU)",
+
+      xp:data.xp
+    }
+
+  ];
+
+  users.sort(
+    (a,b) =>
+      b.xp - a.xp
+  );
+
+  list.innerHTML =
+    users
+      .map(
+        (user,index) => `
+
+          <div class="list-item">
+
+            <b>
+              #${index + 1}
+              ${escapeHTML(user.name)}
+            </b>
+
+            <span
+              class="subtext"
+              style="margin-left:10px;"
+            >
+              ${user.xp} XP
+            </span>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================
+   OWNER
+========================================= */
+
+function openOwner(){
+
+  const pin =
+    prompt(
+      "Enter Owner PIN:"
+    );
+
+  if(
+    pin !== OWNER_PIN
+  ){
+
+    alert(
+      "Wrong Owner PIN!"
+    );
+
+    return;
+
+  }
+
+  showPage("owner");
+
+  refreshOwnerPanel();
+
+}
+
+
+function refreshOwnerPanel(){
+
+  document.getElementById(
+    "ownerStatName"
+  ).textContent =
+    data.profile.name;
+
+  document.getElementById(
+    "ownerStatXP"
+  ).textContent =
+    data.xp;
+
+  document.getElementById(
+    "ownerStatLevel"
+  ).textContent =
+    data.level;
+
+  document.getElementById(
+    "ownerStatStreak"
+  ).textContent =
+    data.streak;
+
+  document.getElementById(
+    "ownerStatSessions"
+  ).textContent =
+    data.sessions;
+
+  document.getElementById(
+    "ownerStatPro"
+  ).textContent =
+    data.pro
+      ? "YES"
+      : "NO";
+
+}
+
+
+/* =========================================
+   OWNER QUICK CONTROLS
+========================================= */
+
+function ownerSetName(){
+
+  const name =
+    document.getElementById(
+      "ownerName"
+    ).value.trim();
+
+  if(!name){
+    return;
+  }
+
+  data.profile.name =
+    name;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerSetXP(){
+
+  const xp =
+    Number(
+      document.getElementById(
+        "ownerXP"
+      ).value
+    );
+
+  if(
+    isNaN(xp) ||
+    xp < 0
+  ){
+    return;
+  }
+
+  data.xp =
+    xp;
+
+  data.levelManuallySet =
+    false;
+
+  updateLevelFromXP();
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerGiveXP(){
+
+  const amount =
+    Number(
+      prompt(
+        "How much XP?"
+      )
+    );
+
+  if(isNaN(amount)){
+    return;
+  }
+
+  data.xp +=
+    amount;
+
+  if(data.xp < 0){
+    data.xp = 0;
+  }
+
+  data.levelManuallySet =
+    false;
+
+  updateLevelFromXP();
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerRemoveXP(){
+
+  const amount =
+    Number(
+      prompt(
+        "How much XP should be removed?"
+      )
+    );
+
+  if(isNaN(amount)){
+    return;
+  }
+
+  data.xp -=
+    amount;
+
+  if(data.xp < 0){
+    data.xp = 0;
+  }
+
+  data.levelManuallySet =
+    false;
+
+  updateLevelFromXP();
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerMaxXP(){
+
+  data.xp =
+    999999;
+
+  data.level =
+    200;
+
+  data.levelManuallySet =
+    true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerSetLevel(){
+
+  const level =
+    Number(
+      document.getElementById(
+        "ownerLevel"
+      ).value
+    );
+
+  if(
+    isNaN(level) ||
+    level < 1
+  ){
+    return;
+  }
+
+  data.level =
+    level;
+
+  data.levelManuallySet =
+    true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerLevel50(){
+
+  data.level =
+    50;
+
+  data.levelManuallySet =
+    true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerSetStreak(){
+
+  const streak =
+    Number(
+      document.getElementById(
+        "ownerStreak"
+      ).value
+    );
+
+  if(
+    isNaN(streak) ||
+    streak < 0
+  ){
+    return;
+  }
+
+  data.streak =
+    streak;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerAddFreeze(){
+
+  data.streakFreezes++;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerSetSessions(){
+
+  const sessions =
+    Number(
+      document.getElementById(
+        "ownerSessions"
+      ).value
+    );
+
+  if(
+    isNaN(sessions) ||
+    sessions < 0
+  ){
+    return;
+  }
+
+  data.sessions =
+    sessions;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerAddSession(){
+
+  data.sessions++;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerAddFiveSessions(){
+
+  data.sessions += 5;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerSetGoal(){
+
+  const goal =
+    document.getElementById(
+      "ownerGoal"
+    ).value.trim();
+
+  if(!goal){
+    return;
+  }
+
+  data.profile.goal =
+    goal;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+/* =========================================
+   OWNER MEMBERSHIPS
+========================================= */
+
+function ownerActivatePro(){
+
+  data.pro = true;
+  data.proTitleOwned = true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerRemovePro(){
+
+  data.pro = false;
+  data.proTitleOwned = false;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerActivateElite(){
+
+  data.elite = true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerActivateProTitle(){
+
+  data.proTitleOwned = true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+/* =========================================
+   OWNER PACKS
+========================================= */
+
+function ownerUnlockStrength(){
+
+  data.strengthPack =
+    true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerUnlockConditioning(){
+
+  data.conditioningPack =
+    true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerUnlockEverything(){
+
+  data.strengthPack =
+    true;
+
+  data.conditioningPack =
+    true;
+
+  data.pro =
+    true;
+
+  data.elite =
+    true;
+
+  data.proTitleOwned =
+    true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+/* =========================================
+   OWNER THEMES
+========================================= */
+
+function ownerTheme(theme){
+
+  data.theme =
+    theme;
+
+  saveData();
+
+  applyTheme();
+
+}
+
+
+/* =========================================
+   OWNER WEBSITE
+========================================= */
+
+function ownerPostAnnouncement(){
+
+  const announcement =
+    document.getElementById(
+      "ownerAnnouncement"
+    ).value.trim();
+
+  if(!announcement){
+    return;
+  }
+
+  data.announcement =
+    announcement;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerRemoveAnnouncement(){
+
+  data.announcement =
+    "";
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerGuestMode(){
+
+  data.guestMode =
+    true;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerLocalProfile(){
+
+  data.guestMode =
+    false;
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerResetChallenges(){
+
+  if(
+    !confirm(
+      "Reset challenge progress?"
+    )
+  ){
+    return;
+  }
+
+  data.completedChallenges =
+    [];
+
+  saveData();
+
+  refreshEverything();
+
+}
+
+
+function ownerResetEverything(){
+
+  if(
+    !confirm(
+      "Reset EVERYTHING?"
+    )
+  ){
+    return;
+  }
+
+  data =
+    defaultData();
+
+  saveData();
+
+  refreshEverything();
+
+  showPage("home");
+
+}
+
+
+/* =========================================
+   COMMAND CENTER
+========================================= */
+
+function commandHelp(){
+
+  return `
+HELP
+STATS
+
+setxp NUMBER
+givexp NUMBER
+removexp NUMBER
+maxxp
+
+setlevel NUMBER
+level50
+
+setstreak NUMBER
+addfreeze NUMBER
+setfreeze NUMBER
+
+setsessions NUMBER
+addsession
+add5sessions
+
+setname NAME
+setgoal GOAL
+
+pro on
+pro off
+
+elite on
+elite off
+
+protitle on
+protitle off
+
+unlock all
+unlock strength
+unlock conditioning
+
+theme red
+theme purple
+theme blue
+theme green
+theme orange
+
+announce MESSAGE
+clearannounce
+
+guest
+local
+
+resetchallenges
+resetall
+  `.trim();
+
+}
+
+
+function showCommandHelp(){
+
+  writeCommandOutput(
+    commandHelp()
+  );
+
+}
+
+
+function clearCommandOutput(){
+
+  document.getElementById(
+    "commandOutput"
+  ).textContent = "";
+
+}
+
+
+function writeCommandOutput(text){
+
+  const output =
+    document.getElementById(
+      "commandOutput"
+    );
+
+  output.textContent +=
+    "\n\n> " + text;
+
+  output.scrollTop =
+    output.scrollHeight;
+
+}
+
+
+function commandSuccess(text){
+
+  writeCommandOutput(
+    "✓ " + text
+  );
+
+}
+
+
+function commandError(text){
+
+  writeCommandOutput(
+    "✕ " + text
+  );
+
+}
+
+
+function getRestOfCommand(parts){
+
+  return parts
+    .slice(1)
+    .join(" ")
+    .trim();
+
+}
+
+
+function runCommand(){
+
+  const input =
+    document.getElementById(
+      "commandInput"
+    );
+
+  const raw =
+    input.value.trim();
+
+  if(!raw){
+    return;
+  }
+
+  const parts =
+    raw.split(/\s+/);
+
+  const command =
+    parts[0].toLowerCase();
+
+
+  switch(command){
+
+
+    case "help":
+
+      commandSuccess(
+        commandHelp()
+      );
+
+      break;
+
+
+    case "stats":
+
+      writeCommandOutput(`
+
+NAME: ${data.profile.name}
+XP: ${data.xp}
+LEVEL: ${data.level}
+STREAK: ${data.streak}
+FREEZES: ${data.streakFreezes}
+SESSIONS: ${data.sessions}
+GOAL: ${data.profile.goal}
+PRO: ${data.pro ? "YES" : "NO"}
+ELITE: ${data.elite ? "YES" : "NO"}
+PRO TITLE: ${data.proTitleOwned ? "YES" : "NO"}
+
+      `.trim());
+
+      break;
+
+
+    case "setxp":{
+
+      const value =
+        Number(parts[1]);
+
+      if(
+        isNaN(value) ||
+        value < 0
+      ){
+
+        commandError(
+          "Use: setxp NUMBER"
+        );
+
+        break;
+
+      }
+
+      data.xp =
+        value;
+
+      data.levelManuallySet =
+        false;
+
+      updateLevelFromXP();
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `XP set to ${value}.`
+      );
+
+      break;
+
+    }
+
+
+    case "givexp":{
+
+      const value =
+        Number(parts[1]);
+
+      if(isNaN(value)){
+
+        commandError(
+          "Use: givexp NUMBER"
+        );
+
+        break;
+
+      }
+
+      data.xp +=
+        value;
+
+      if(data.xp < 0){
+        data.xp = 0;
+      }
+
+      data.levelManuallySet =
+        false;
+
+      updateLevelFromXP();
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `${value} XP added.`
+      );
+
+      break;
+
+    }
+
+
+    case "removexp":{
+
+      const value =
+        Number(parts[1]);
+
+      if(isNaN(value)){
+
+        commandError(
+          "Use: removexp NUMBER"
+        );
+
+        break;
+
+      }
+
+      data.xp -=
+        value;
+
+      if(data.xp < 0){
+        data.xp = 0;
+      }
+
+      data.levelManuallySet =
+        false;
+
+      updateLevelFromXP();
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `${value} XP removed.`
+      );
+
+      break;
+
+    }
+
+
+    case "maxxp":
+
+      data.xp =
+        999999;
+
+      data.level =
+        200;
+
+      data.levelManuallySet =
+        true;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "MAX XP enabled."
+      );
+
+      break;
+
+
+    case "setlevel":{
+
+      const value =
+        Number(parts[1]);
+
+      if(
+        isNaN(value) ||
+        value < 1
+      ){
+
+        commandError(
+          "Use: setlevel NUMBER"
+        );
+
+        break;
+
+      }
+
+      data.level =
+        value;
+
+      data.levelManuallySet =
+        true;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `Level set to ${value}.`
+      );
+
+      break;
+
+    }
+
+
+    case "level50":
+
+      data.level =
+        50;
+
+      data.levelManuallySet =
+        true;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "Level set to 50."
+      );
+
+      break;
+
+
+    case "setstreak":{
+
+      const value =
+        Number(parts[1]);
+
+      if(
+        isNaN(value) ||
+        value < 0
+      ){
+
+        commandError(
+          "Use: setstreak NUMBER"
+        );
+
+        break;
+
+      }
+
+      data.streak =
+        value;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `Streak set to ${value}.`
+      );
+
+      break;
+
+    }
+
+
+    case "addfreeze":{
+
+      const value =
+        Number(parts[1]);
+
+      if(
+        isNaN(value) ||
+        value < 0
+      ){
+
+        commandError(
+          "Use: addfreeze NUMBER"
+        );
+
+        break;
+
+      }
+
+      data.streakFreezes +=
+        value;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `${value} freeze(s) added.`
+      );
+
+      break;
+
+    }
+
+
+    case "setfreeze":{
+
+      const value =
+        Number(parts[1]);
+
+      if(
+        isNaN(value) ||
+        value < 0
+      ){
+
+        commandError(
+          "Use: setfreeze NUMBER"
+        );
+
+        break;
+
+      }
+
+      data.streakFreezes =
+        value;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `Freezes set to ${value}.`
+      );
+
+      break;
+
+    }
+
+
+    case "setsessions":{
+
+      const value =
+        Number(parts[1]);
+
+      if(
+        isNaN(value) ||
+        value < 0
+      ){
+
+        commandError(
+          "Use: setsessions NUMBER"
+        );
+
+        break;
+
+      }
+
+      data.sessions =
+        value;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `Sessions set to ${value}.`
+      );
+
+      break;
+
+    }
+
+
+    case "addsession":
+
+      data.sessions++;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "1 session added."
+      );
+
+      break;
+
+
+    case "add5sessions":
+
+      data.sessions += 5;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "5 sessions added."
+      );
+
+      break;
+
+
+    case "setname":{
+
+      const name =
+        getRestOfCommand(parts);
+
+      if(!name){
+
+        commandError(
+          "Use: setname NAME"
+        );
+
+        break;
+
+      }
+
+      data.profile.name =
+        name;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        `Name changed to ${name}.`
+      );
+
+      break;
+
+    }
+
+
+    case "setgoal":{
+
+      const goal =
+        getRestOfCommand(parts);
+
+      if(!goal){
+
+        commandError(
+          "Use: setgoal GOAL"
+        );
+
+        break;
+
+      }
+
+      data.profile.goal =
+        goal;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "Goal changed."
+      );
+
+      break;
+
+    }
+
+
+    case "pro":{
+
+      const value =
+        parts[1]?.toLowerCase();
+
+      if(value === "on"){
+
+        data.pro = true;
+        data.proTitleOwned = true;
+
+        commandSuccess(
+          "PRO enabled."
+        );
+
+      }else if(value === "off"){
+
+        data.pro = false;
+        data.proTitleOwned = false;
+
+        commandSuccess(
+          "PRO disabled."
+        );
+
+      }else{
+
+        commandError(
+          "Use: pro on OR pro off"
+        );
+
+        break;
+
+      }
+
+      saveData();
+      refreshEverything();
+
+      break;
+
+    }
+
+
+    case "elite":{
+
+      const value =
+        parts[1]?.toLowerCase();
+
+      if(value === "on"){
+
+        data.elite = true;
+
+        commandSuccess(
+          "ELITE enabled."
+        );
+
+      }else if(value === "off"){
+
+        data.elite = false;
+
+        commandSuccess(
+          "ELITE disabled."
+        );
+
+      }else{
+
+        commandError(
+          "Use: elite on OR elite off"
+        );
+
+        break;
+
+      }
+
+      saveData();
+      refreshEverything();
+
+      break;
+
+    }
+
+
+    case "protitle":{
+
+      const value =
+        parts[1]?.toLowerCase();
+
+      if(value === "on"){
+
+        data.proTitleOwned = true;
+
+        commandSuccess(
+          "PRO TITLE enabled."
+        );
+
+      }else if(value === "off"){
+
+        data.proTitleOwned = false;
+
+        commandSuccess(
+          "PRO TITLE disabled."
+        );
+
+      }else{
+
+        commandError(
+          "Use: protitle on OR protitle off"
+        );
+
+        break;
+
+      }
+
+      saveData();
+      refreshEverything();
+
+      break;
+
+    }
+
+
+    case "unlock":{
+
+      const value =
+        parts[1]?.toLowerCase();
+
+      if(value === "all"){
+
+        data.strengthPack = true;
+        data.conditioningPack = true;
+        data.pro = true;
+        data.elite = true;
+        data.proTitleOwned = true;
+
+        commandSuccess(
+          "Everything unlocked."
+        );
+
+      }else if(value === "strength"){
+
+        data.strengthPack = true;
+
+        commandSuccess(
+          "Strength Pack unlocked."
+        );
+
+      }else if(value === "conditioning"){
+
+        data.conditioningPack = true;
+
+        commandSuccess(
+          "Conditioning Pack unlocked."
+        );
+
+      }else{
+
+        commandError(
+          "Use: unlock all, unlock strength, or unlock conditioning"
+        );
+
+        break;
+
+      }
+
+      saveData();
+      refreshEverything();
+
+      break;
+
+    }
+
+
+    case "theme":{
+
+      const value =
+        parts[1]?.toLowerCase();
+
+      const themes = [
+        "red",
+        "purple",
+        "blue",
+        "green",
+        "orange"
+      ];
+
+      if(
+        !themes.includes(value)
+      ){
+
+        commandError(
+          "Themes: red, purple, blue, green, orange"
+        );
+
+        break;
+
+      }
+
+      data.theme =
+        value;
+
+      saveData();
+
+      applyTheme();
+
+      commandSuccess(
+        `Theme changed to ${value}.`
+      );
+
+      break;
+
+    }
+
+
+    case "announce":{
+
+      const message =
+        getRestOfCommand(parts);
+
+      if(!message){
+
+        commandError(
+          "Use: announce MESSAGE"
+        );
+
+        break;
+
+      }
+
+      data.announcement =
+        message;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "Announcement posted."
+      );
+
+      break;
+
+    }
+
+
+    case "clearannounce":
+
+      data.announcement =
+        "";
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "Announcement removed."
+      );
+
+      break;
+
+
+    case "guest":
+
+      data.guestMode =
+        true;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "Guest Mode enabled."
+      );
+
+      break;
+
+
+    case "local":
+
+      data.guestMode =
+        false;
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "Local Profile enabled."
+      );
+
+      break;
+
+
+    case "resetchallenges":
+
+      data.completedChallenges =
+        [];
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "Challenges reset."
+      );
+
+      break;
+
+
+    case "resetall":{
+
+      if(
+        !confirm(
+          "Reset EVERYTHING?"
+        )
+      ){
+
+        commandError(
+          "Reset cancelled."
+        );
+
+        break;
+
+      }
+
+      data =
+        defaultData();
+
+      saveData();
+
+      refreshEverything();
+
+      commandSuccess(
+        "Everything reset."
+      );
+
+      break;
+
+    }
+
+
+    default:
+
+      commandError(
+        `Unknown command: ${command}`
+      );
+
+      break;
+
+  }
+
+  input.value = "";
+
+}
+
+
+/* =========================================
+   ANNOUNCEMENT
+========================================= */
+
+function refreshAnnouncement(){
+
+  const box =
+    document.getElementById(
+      "announcement"
+    );
+
+  if(data.announcement){
+
+    box.textContent =
+      "📢 " +
+      data.announcement;
+
+    box.classList.add(
+      "show"
+    );
+
+  }else{
+
+    box.textContent = "";
+
+    box.classList.remove(
+      "show"
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   HOME
+========================================= */
+
+function refreshHome(){
+
+  document.getElementById(
+    "homeSessions"
+  ).textContent =
+    data.sessions;
+
+  document.getElementById(
+    "homeXP"
+  ).textContent =
+    data.xp;
+
+  document.getElementById(
+    "homeStreak"
+  ).textContent =
+    data.streak;
+
+  document.getElementById(
+    "homeLevel"
+  ).textContent =
+    data.level;
+
+  document.getElementById(
+    "homeFavorites"
+  ).textContent =
+    data.favorites.length;
+
+  document.getElementById(
+    "checkEnergy"
+  ).value =
+    data.checkIn.energy;
+
+  document.getElementById(
+    "checkMood"
+  ).value =
+    data.checkIn.mood;
+
+  document.getElementById(
+    "checkSleep"
+  ).value =
+    data.checkIn.sleep;
+
+  recommendedWorkout();
+
+  renderHomeWorkouts();
+
+}
+
+
+/* =========================================
+   REFRESH EVERYTHING
+========================================= */
+
+function refreshEverything(){
+
+  updateLevelFromXP();
+
+  saveData();
+
+  refreshHome();
+
+  refreshAnnouncement();
+
+  refreshProgress();
+
+  refreshProfile();
+
+  refreshChallenges();
+
+  refreshLeaderboard();
+
+  refreshOwnerPanel();
+
+  renderWorkouts();
+
+  renderFavorites();
+
+  applyTheme();
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+refreshEverything();
+
+showPage("home");
+
+</script>
+
+</body>
+</html>
